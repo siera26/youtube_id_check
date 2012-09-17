@@ -42,41 +42,13 @@ class YoutubeIdsController < ApplicationController
   # POST /youtube_ids
   # POST /youtube_ids.json
   def create
-    # check if url has 'youtube' string
-    if params[:youtube_id][:y_id].strip == ""
-      return_new_page("Please input Youtube URL.")
+    @youtube_id = YoutubeId.new(params[:youtube_id])
+    
+    y_id = @youtube_id.extract_youtube_id_from_url()
+    if y_id.nil?
+      return_new_page()
       return
     end
-    
-    # check if url has 'youtube' string
-    if !params[:youtube_id][:y_id].include?("youtube.com")
-      return_new_page("This URL is not youtube url. Please try it again.")
-      return
-    end
-    
-    # parse uri
-    begin
-      tmp_params = URI.parse(params[:youtube_id][:y_id]).query
-    rescue URI::InvalidURIError => ex
-      return_new_page("This URL is invalid url. Please try it again.")
-      return
-    end
-    
-    # get query params
-    if tmp_params.nil?
-      return_new_page("I can't find params from this url. Please try it again.")
-      return
-    end
-    
-    # parse query params and get youtube_id
-    y_id = CGI.parse(tmp_params)['v']
-    if y_id.length == 0
-      return_new_page("I can't find id from this url. Please try it again.")
-      return
-    end
-    
-    # get video info using Youtube API
-    y_id = y_id[0].strip
     
     g_url = "http://gdata.youtube.com/feeds/api/videos?q=#{y_id}"
     doc = Nokogiri::HTML(open(g_url))
@@ -140,9 +112,8 @@ class YoutubeIdsController < ApplicationController
   end
   
   private
-  def return_new_page(notice)
-    respond_to do |format|
-      @youtube_id = YoutubeId.new(params[:youtube_id]) 
+  def return_new_page(notice = nil)
+    respond_to do |format| 
       flash[:notice] = notice
       format.html { render "new"}
     end

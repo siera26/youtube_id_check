@@ -72,35 +72,35 @@ describe YoutubeIdsController do
       post :create, :youtube_id => {:y_id => ""}
       
       response.should render_template('new')
-      flash[:notice].should include("input Youtube URL")
+      assigns(:youtube_id).errors[:y_id].should eq(["not a valid url"])
     end
     
     it "render 'new' view with validation error" do
       post :create, :youtube_id => {:y_id => "http://www.youtu.com/watch?v=2123"}
       
       response.should render_template('new')
-      flash[:notice].should include("not youtube url")
+      assigns(:youtube_id).errors[:y_id].should eq(["not a youtube url"])
     end
     
     it "render 'new' view with validation error" do
       post :create, :youtube_id => {:y_id => "http://www.youtube.com/watch?v=g0OzSpzYe6I adgf"}
       
       response.should render_template('new')
-      flash[:notice].should include("invalid url")
+      assigns(:youtube_id).errors[:y_id].should eq(["not a valid url"])
     end
     
     it "render 'new' view with validation error" do
       post :create, :youtube_id => {:y_id => "http://www.youtube.com/watch"}
       
       response.should render_template('new')
-      flash[:notice].should include("can't find params")
+      assigns(:youtube_id).errors[:y_id].should eq(["has no params"])
     end
     
     it "render 'new' view with validation error" do
       post :create, :youtube_id => {:y_id => "http://www.youtube.com/watch?c=g0OzSpzYe6I"}
       
       response.should render_template('new')
-      flash[:notice].should include("can't find id")
+      assigns(:youtube_id).errors[:y_id].should eq(["hasnot youtube id param"])
     end
     
     it "render 'new' view with 'not found' message" do
