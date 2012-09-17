@@ -69,6 +69,13 @@ describe YoutubeIdsController do
     end
     
     it "render 'new' view with validation error" do
+      post :create, :youtube_id => {:y_id => ""}
+      
+      response.should render_template('new')
+      flash[:notice].should include("input Youtube URL")
+    end
+    
+    it "render 'new' view with validation error" do
       post :create, :youtube_id => {:y_id => "http://www.youtu.com/watch?v=2123"}
       
       response.should render_template('new')
