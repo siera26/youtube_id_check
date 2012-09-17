@@ -78,8 +78,8 @@ class YoutubeIdsController < ApplicationController
     # get video info using Youtube API
     y_id = y_id[0].strip
     
-    g_url = "http://gdata.youtube.com/feeds/api/videos?q=#{y_id}"
-    doc = Nokogiri::HTML(open(g_url))
+    #g_url = "http://gdata.youtube.com/feeds/api/videos?q=#{y_id}"
+    #doc = Nokogiri::HTML(open(g_url))
     
     # for testing
     #docfile = File.open("/work/youtube_g_exist.html", "r")
@@ -103,7 +103,8 @@ class YoutubeIdsController < ApplicationController
       end
     else
       respond_to do |format|
-        return_new_page('Video not found.')
+        return_new_page("Video not found.")
+        return
       end
     end
   end
