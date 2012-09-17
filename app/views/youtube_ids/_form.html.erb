@@ -1,0 +1,15 @@
+<%= simple_form_for(@youtube_id, :html => {:class => 'form-horizontal' }) do |f| %>
+  <% if @youtube_id.errors.any? %>
+    <% @youtube_id.errors.full_messages.each do |msg| %>
+      <p class="alert"><%= msg %></p>
+    <% end %>
+  <% end %>
+  <% if(notice) %><p class="alert"><%= notice %></p><% end %>
+  <div class="field">
+    <%= f.input :y_id, :label=>'Youtube URL',:input_html => {:style=>"width:400px;", :placeholder => "Example: http://www.youtube.com/watch?v=g0OzSpzYe6I"}  %>
+  </div>
+  <div class="actions pull-right">
+    <%= f.submit "Submit", :class => "btn btn-primary" %> &nbsp;
+    <%= link_to 'Back', youtube_ids_path, :class => "btn" %>
+  </div>
+<% end %>
